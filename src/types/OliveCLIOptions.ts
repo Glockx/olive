@@ -20,6 +20,7 @@ export interface OliveCLIOptions {
   output: string;
   prefix: string;
   verbose: boolean;
+  fontFile?: string;
 }
 
 export const optsSchema = z.object({
@@ -42,4 +43,5 @@ export const optsSchema = z.object({
   output: z.string(),
   prefix: z.string(),
   verbose: z.boolean(),
+  fontFile: z.string().optional().nullable(),
 });

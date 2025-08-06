@@ -5,7 +5,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import os from "os";
 import Color from "color";
-import { createCanvas } from "canvas";
+import { createCanvas, registerFont } from "canvas";
 import pLimit from "p-limit";
 import { optsSchema, type OliveCLIOptions } from "./types/OliveCLIOptions";
 
@@ -60,6 +60,8 @@ async function main() {
       "horizontal"
     )
     .option("--text <string>", "Text content for text type", "Dummy Image")
+    // Add a new CLI option for custom font file
+    .option("--font-file <string>", "Path to custom font file")
     .option("--font <string>", "Font family for text", "Arial")
     .option(
       "--font-size <number>",
@@ -105,6 +107,15 @@ async function main() {
   // -- Ensure output exists
   await fs.mkdir(opts.output, { recursive: true });
 
+  // -- Register custom font if provided
+  if (opts.fontFile) {
+    // Register the font with the specified family name
+    registerFont(opts.fontFile, { family: opts.font });
+    if (opts.verbose) {
+      console.log(`Registered custom font: ${opts.fontFile} as "${opts.font}"`);
+    }
+  }
+
   // -- Pre-parse colors once
   const solidHex = Color(opts.color).hex();
   const startHex = Color(opts.startColor).hex();
@@ -137,13 +148,38 @@ async function main() {
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, opts.width, opts.height);
   } else {
+    // Split text by newlines for multi-line support
+    const lines = opts.text.split("\\n");
+    const lineHeight = opts.fontSize * 1.2; // 1.2 is a common line height multiplier
+
+    // Calculate total text height
+    const totalTextHeight = lines.length * lineHeight;
+
+    // Fill background
     ctx.fillStyle = bgHex;
     ctx.fillRect(0, 0, opts.width, opts.height);
+
+    // Set text properties
     ctx.fillStyle = textHex;
-    ctx.font = `${opts.fontSize}px ${opts.font}`;
+    ctx.font = `${opts.fontSize}px "${opts.font}"`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    ctx.fillText(opts.text, opts.width / 2, opts.height / 2);
+
+    // Calculate starting Y position to center the entire text block
+    const startY = (opts.height - totalTextHeight) / 2 + opts.fontSize / 2;
+
+    // Draw each line
+    lines.forEach((line, index) => {
+      const y = startY + index * lineHeight;
+      ctx.fillText(line, opts.width / 2, y);
+
+      if (opts.verbose) {
+        const textWidth = ctx.measureText(line).width;
+        console.log(
+          `Line ${index + 1}: "${line}" - width: ${textWidth}px, y: ${y}px`
+        );
+      }
+    });
   }
 
   // Generate the buffer once
