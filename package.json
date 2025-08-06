@@ -1,6 +1,6 @@
 {
   "name": "olive-cli",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "maintainers": [
     "Nijat Muzaffarli"
   ],
@@ -30,6 +30,6 @@
     "publish": "bun run bundle && bun publish"
   },
   "bin": {
-    "olive-cli": "./dist/index.js"
+    "olive-cli": "./build/index.js"
   }
 }
