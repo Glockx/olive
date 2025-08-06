@@ -1,9 +1,15 @@
 {
   "name": "olive-cli",
   "version": "1.0.2",
-  "maintainers": [
-    "Nijat Muzaffarli"
+  "author": "Nijat Muzaffarli",
+  "keywords": [
+    "cli",
+    "command-line",
+    "image generator",
+    "dummy image",
+    "placeholder"
   ],
+  "main": "build/index.js",
   "module": "index.ts",
   "repository": {
     "type": "git",
@@ -27,9 +33,10 @@
   },
   "scripts": {
     "bundle": "rimraf ./build/ && bun run build.ts",
-    "publish": "bun run bundle && bun publish"
+    "prepublish": "bun run bundle"
   },
   "bin": {
     "olive-cli": "./build/index.js"
-  }
+  },
+  "license": "MIT"
 }
