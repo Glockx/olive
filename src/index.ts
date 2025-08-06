@@ -1,9 +1,11 @@
+#!/usr/bin/env node
+
 import { InvalidArgumentError, program } from "commander";
 import { promises as fs } from "fs";
 import path from "path";
 import os from "os";
 import Color from "color";
-import { Canvas, CanvasRenderingContext2D, createCanvas } from "canvas";
+import { createCanvas } from "canvas";
 import pLimit from "p-limit";
 import { optsSchema, type OliveCLIOptions } from "./types/OliveCLIOptions";
 
