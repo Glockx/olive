@@ -5,4 +5,5 @@ Bun.build({
   format: "esm",
   external: ["canvas"],
   target: "node",
+  sourcemap: "external",
 });

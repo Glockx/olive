@@ -19,7 +19,7 @@
   "private": false,
   "devDependencies": {
     "@types/bun": "latest",
-    "nexe": "^5.0.0-beta.4"
+    "rimraf": "^6.0.1"
   },
   "peerDependencies": {
     "typescript": "^5"
@@ -32,8 +32,7 @@
     "zod": "^4.0.15"
   },
   "scripts": {
-    "bundle": "rimraf ./build/ && bun run build.ts",
-    "prepublish": "bun run bundle"
+    "bundle": "rimraf ./build/ && bun run build.ts"
   },
   "bin": {
     "olive-cli": "./build/index.js"
